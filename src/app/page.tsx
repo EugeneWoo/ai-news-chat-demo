@@ -1,6 +1,10 @@
+// Main chat page for AI News Agent web app. Handles preference collection, chat UI, and backend communication.
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
 
+// =====================
+// Section: Type Definitions & Constants
+// =====================
 type Message = {
   sender: "bot" | "user";
   text: string;
@@ -27,7 +31,11 @@ type Preferences = {
   [key: string]: string;
 };
 
+// =====================
+// Section: Home Component
+// =====================
 export default function Home() {
+  // State Declarations
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<Message[]>([
     { sender: "bot", text: PREFERENCE_QUESTIONS[0].question }
@@ -36,7 +44,7 @@ export default function Home() {
   const [pendingPrefIndex, setPendingPrefIndex] = useState(0);
   const [allPrefsSet, setAllPrefsSet] = useState(false);
 
-  // Send message to backend
+  // Form Submit Handler: handleSend
   async function handleSend(e: FormEvent) {
     e.preventDefault();
     if (!input.trim()) return;
@@ -100,6 +108,7 @@ export default function Home() {
     }
   }
 
+  // Preferences and History Reset: handleReset
   function handleReset() {
     setInput("");
     setPreferences({});
@@ -108,7 +117,7 @@ export default function Home() {
     setHistory([{ sender: "bot", text: PREFERENCE_QUESTIONS[0].question }]);
   }
 
-  // Display summaries array as bullets or paragraphs, or fallback to legacy text
+  // Chat Display Renderer: renderChat
   const renderChat = () => {
     // Find latest bot message with summaries
     const lastBotMsgWithSummaries = [...history]
@@ -175,6 +184,7 @@ export default function Home() {
     );
   };
 
+  // Main Component Render
   return (
     <div style={{ maxWidth: 600, margin: "2rem auto", fontFamily: "sans-serif" }}>
       <h2>AI News Agent Chat</h2>
@@ -205,6 +215,9 @@ export default function Home() {
   );
 }
 
+// =====================
+// Section: PreferenceChecklist Component
+// =====================
 function PreferenceChecklist({ preferences }: { preferences: Preferences }) {
   console.log("Checklist received preferences:", preferences);
   return (
