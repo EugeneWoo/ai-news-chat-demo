@@ -63,4 +63,4 @@ The frontend is now available at http://localhost:3000.
 
 ## Future Improvements given more time
 1. I was unable to consistently display the news summary in bullet or paragraph format, despite extensive attempts to resolve this in both the backend and frontend.
-2. The final preference item does not update to a tick until the news summary appears. I have dedicated significant time to addressing this issue (see the preferences data logging in main.py), but a reliable solution remains elusive.
+2. The final preference for 'News Topic' does not change to a green tick until the news summary displays. I have dedicated significant time to addressing this issue (see the preferences data logging in main.py), but a reliable solution remains elusive.
