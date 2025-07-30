@@ -1,3 +1,7 @@
+# main.py - FastAPI backend for AI News Chat. Handles preference collection, Exa/LLM integration, and summarization.
+# =====================
+# Section: Imports and Environment Setup
+# =====================
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -23,11 +27,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# =====================
+# Section: Pydantic Models
+# =====================
 class ChatInput(BaseModel):
     message: str
     history: list
     preferences: dict
 
+# =====================
+# Section: Preference Questions and Constants
+# =====================
 PREFERENCE_QUESTIONS = [
     ("tone", "What is your preferred tone of voice? (e.g., formal, casual, enthusiastic)"),
     ("format", "What is your preferred response format? (e.g., bullet points, paragraphs)"),
@@ -36,14 +46,21 @@ PREFERENCE_QUESTIONS = [
     ("topics", "What are your preferred news topics? (e.g., technology, sports, politics)"),
 ]
 
+# =====================
+# Section: In-Memory Cache
+# =====================
 # Simple in-memory cache
 news_cache = {}
 
+# =====================
+# Section: Utility Functions
+# =====================
 def make_cache_key(topic, preferences):
     # Use a tuple of topic + frozen preferences dict as the cache key
     key = (topic.strip().lower(), tuple(sorted((k, str(v).strip().lower()) for k, v in preferences.items())))
     return key
 
+# ---- Generate Search Query using LLM ----
 def generate_search_query(user_question):
     SYSTEM_MESSAGE = (
         "You are a helpful assistant that generates search queries based on user questions. Only generate one search query."
@@ -59,6 +76,7 @@ def generate_search_query(user_question):
     )
     return completion.choices[0].message.content.strip()
 
+# ---- Summarize Article using LLM ----
 async def summarize_article_async(article_text, preferences):
     SYSTEM_MESSAGE = (
         "You are a helpful assistant that briefly summarizes the content of a webpage. Summarize the user's input."
@@ -90,6 +108,7 @@ async def summarize_article_async(article_text, preferences):
     )
     return response.choices[0].message.content.strip()
 
+# ---- Exa API: News Search ----
 def exa_search(query, start_published_date, num_results, api_key):
     url = "https://api.exa.ai/search"
     headers = {
@@ -107,6 +126,7 @@ def exa_search(query, start_published_date, num_results, api_key):
     res.raise_for_status()
     return res.json()
 
+# ---- Exa API: Get Article Contents ----
 def exa_get_contents(urls, api_key):
     url = "https://api.exa.ai/contents"
     headers = {
@@ -121,6 +141,9 @@ def exa_get_contents(urls, api_key):
     res.raise_for_status()
     return res.json().get("results", [])
 
+# =====================
+# Section: FastAPI Endpoints
+# =====================
 @app.post("/chatbot")
 async def chatbot_endpoint(inp: ChatInput):
     history = inp.history or []
@@ -179,7 +202,7 @@ async def chatbot_endpoint(inp: ChatInput):
             results = search_response.get("results", [])
             summaries = []
             summary_tasks = []
-            contents_by_url = {}  # <-- always define before use!
+            contents_by_url = {}
 
             if not results:
                 summaries = [{"title": "No Results", "url": "", "summary": "Sorry, I couldn't find any recent news articles for your query."}]
