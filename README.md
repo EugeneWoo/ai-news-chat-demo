@@ -1,7 +1,7 @@
 # AI News Chat Demo
 
-An AI-powered chat app that collects user preferences, optimizes search queries, and summarizes news articles in your preferred format (bullets or paragraphs). Built with a React (Next.js) frontend and FastAPI backend.
-All external API requests (OpenAI, Exa) are made via direct HTTP requests and not with SDKs, wrappers, or higher-level abstractions.
+An AI-powered chat app that collects user preferences, optimizes search queries, and summarizes news articles in your preferred format. 
+Built with a React (Next.js) frontend and FastAPI backend; all external API requests (OpenAI, Exa) are made via direct HTTP requests and not with SDKs, wrappers, or higher-level abstractions.
 
 ---
 
