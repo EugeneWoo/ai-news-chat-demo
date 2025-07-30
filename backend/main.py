@@ -156,21 +156,6 @@ async def chatbot_endpoint(inp: ChatInput):
                 "preferences": preferences,
                 "pending_preference": k
             }
-
-    # If all preferences are now filled AND this message was a preference answer, show confirmation only
-    if user_msg and pending is not None and history and history[-1]["sender"] == "bot":
-        # We just set the last preference; let user know and do not run news agent yet
-        if all(preferences.get(k) for k, _ in PREFERENCE_QUESTIONS):
-            bot_reply = "All preferences saved! ✅ Now type anything (e.g., 'Show me news on your topics') to get the latest headlines."
-            history.append({"sender": "bot", "text": bot_reply})
-            print("Backend returned preferences (after last pref):", json.dumps(preferences, indent=2, ensure_ascii=False), flush=True)
-            return {
-                "reply": bot_reply,
-                "history": history,
-                "preferences": preferences,
-                "pending_preference": None
-            }
-
     # If all preferences are filled, continue to news logic below
 
     # Step 2: All preferences collected, process as news query
