@@ -55,7 +55,7 @@ The frontend is now available at http://localhost:3000.
 ## Assumptions & Decisions
 - **Demo Scope:** Non-production grade i.e. no authentication, database, or security management 
 - **Preferences Flow:** Preferences are collected in order using PREFERENCE_QUESTIONS. Backend indicates which preferences remain unset.
-- **Exa Search:** Limited to 5 results in the past week from /Search, and passed onto /Content to pull the text content from the pages.
+- **Exa API Calls:** Limited news search to 5 results in the past week (via /Search), which are then passed to /Contents to pull the full text content.
 - **Context Window:** Limited article text to 6,000 characters to avoid exceeding ChatGPT's context window.
 - **API Keys:** You must supply your own OpenAI and Exa API keys in the backend .env.
 - **Choice of LLM:** ChatGPT-3.5-Turbo instead of 4o for optimal balance of speed and performance 
