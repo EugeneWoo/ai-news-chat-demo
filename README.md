@@ -53,11 +53,12 @@ The frontend is now available at http://localhost:3000.
 ---
 
 ## Assumptions & Decisions
-- **Preferences Flow:** Preferences are collected in order using PREFERENCE_QUESTIONS. Backend indicates which preferences remain unset.
 - **Demo Scope:** Non-production grade i.e. no authentication, database, or security management 
+- **Preferences Flow:** Preferences are collected in order using PREFERENCE_QUESTIONS. Backend indicates which preferences remain unset.
+- **Exa Search:** Limited to 5 results in the past week from /Search, and passed onto /Content to pull the text content from the pages.
+- **Context Window:** Limited article text to 6,000 characters to avoid exceeding ChatGPT's context window.
 - **API Keys:** You must supply your own OpenAI and Exa API keys in the backend .env.
 - **Choice of LLM:** ChatGPT-3.5-Turbo instead of 4o for optimal balance of speed and performance 
-- **Localhost only:** Communication is via localhost for dev; CORS must be configured if deploying.
 - **No use of LangChain, LangGraph, or similar frameworks:** All LLM, prompt, and workflow logic is written directly in Python without any orchestration, agentic, or workflow frameworks.
 - **No SDKs or abstractions:** All external API requests (OpenAI, Exa, etc.) are made via direct HTTP requests (using the `requests` library) and not with SDKs, wrappers, or higher-level abstractions.
 
